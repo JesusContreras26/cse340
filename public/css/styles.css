@@ -31,16 +31,19 @@
  color: black;
 }
 
-nav{
+#nav{
   padding: 0.5rem 1rem;
   background-color: #242332;
-  color: white;
-}
-
-nav ul{
+  list-style: none;
   display: flex;
   justify-content: space-between;
+}
+
+#nav li a{
+  display: flex;
+  color: white;
   list-style: none;
+  text-decoration: none;
 }
 
 #hero{
@@ -114,6 +117,78 @@ footer{
   margin-top: 0.5rem;
 }
 
+#inv-display{
+  width: 15rem;
+  margin: 0 auto;
+  list-style: none;
+}
+
+#inv-display li{
+  margin: 1rem;
+  text-align: center;
+  border: 2px solid rgb(50, 94, 114);
+  border-radius: 5px;
+  background-color: rgba(241, 243, 252, 0.4);
+}
+
+.namePrice{
+  padding: 1rem;
+}
+
+.namePrice h2{
+  padding: 0.5rem;
+  font-size: 1.1rem;
+}
+.namePrice span{
+  font-weight: bolder;
+  font-size: 1rem;
+}
+
+#inv-display li a img{
+  display: flex;
+  width: 100%;
+  margin: 0 auto;
+  object-fit:cover;
+}
+
+#inv-display li a{
+  margin: 0;
+}
+
+#ind-car img{
+  width: 100%;
+}
+
+.description{
+  margin: 1rem 0.3rem;
+}
+
+.description h2:nth-child(2){
+  padding: 1rem 0.5rem;
+  background-color: rgba(188, 189, 194, 0.4);
+  font-size: 1.2rem;
+}
+
+.description h2:nth-child(1){
+  margin-bottom: 1.3rem;
+}
+
+.description p{
+  margin: 1.5rem 0;
+  padding: 0 0.5rem;
+  font-size: 1.2rem;
+}
+
+.description span{
+  font-weight: bolder;
+  font-size: 1.2rem;
+}
+
+.description p:nth-child(4){
+  background-color: rgba(188, 189, 194, 0.4);
+  padding: 1rem 0.5rem;
+}
+
 @media screen and (min-width: 500px){
   body{
     background-image: url(/images/site/checkerboard.jpg);
@@ -176,7 +251,30 @@ footer{
     margin-top: 2rem;
   }
 
-  nav ul{
+  #nav ul{
     justify-content: space-around;
   }
+
+  #inv-display{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+
+  }
+
+  #inv-display li{
+    width: 13rem;
+  }
+  
+  #ind-car{
+    display: flex;
+  }
+
+  #ind-car img{
+    
+  }
+
 }
+
