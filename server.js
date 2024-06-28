@@ -46,14 +46,15 @@ app.use(async(err, req, res, next) =>{
   let nav = await utilities.getNav()
   let message
   let title
-  console.error(`Error at: "${req.originalUrl}": ${err.message}`)
   if (err.status == 404) { 
     message = err.message
     title = err.status
+    console.error(`Error at: "${req.originalUrl}": ${err.message}`)
   } 
   else{ 
     message = 'Oh no! There was a crash. Maybe try a different route?'
     title = 'Server Error'
+    console.error(`Error at: "${req.originalUrl}": ${err.status} ${message}`)
   }
 
   res.render("errors/error", {
