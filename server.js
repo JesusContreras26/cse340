@@ -10,6 +10,10 @@ const expressLayouts = require("express-ejs-layouts")
 const env = require("dotenv").config()
 const app = express()
 const static = require("./routes/static")
+const baseController = require("./controllers/baseController")
+const inventoryRoute = require("./routes/inventoryRoute")
+const errorRoute = require("./routes/errorRoute")
+const utilities = require("./utilities/")
 
 /* ***********************
  * View Engine and Templates
@@ -24,8 +28,41 @@ app.set("layout", "./layouts/layout")
  *************************/
 app.use(static)
 //Index route
-app.get("/", function(req, res){
-  res.render("index", {title: "home"})
+app.get("/", utilities.handleErrors(baseController.buildHome))
+// Inventory routes
+app.use("/inv", inventoryRoute)
+// Error route
+app.use("/error", errorRoute)
+// File Not Found Route - must be last route in the list
+app.use(async(req, res, next) => {
+  next({status: 404, message: 'Sorry, we appear to have lost that page.'})
+})
+
+/* ***********************
+* Express Error Handler
+* Place after all other middleware
+*************************/
+app.use(async(err, req, res, next) =>{
+  let nav = await utilities.getNav()
+  let message
+  let title
+  if (err.status == 404) { 
+    message = err.message
+    title = err.status
+    console.error(`Error at: "${req.originalUrl}": ${err.message}`)
+  } 
+  else{ 
+    message = 'Oh no! There was a crash. Maybe try a different route?'
+    title = 'Server Error'
+    console.error(`Error at: "${req.originalUrl}": ${err.status} ${message}`)
+  }
+
+  res.render("errors/error", {
+    title,
+    message,
+    nav
+  })
+
 })
 
 /* ***********************
