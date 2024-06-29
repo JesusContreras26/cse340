@@ -165,7 +165,7 @@ footer{
 
 .description h2:nth-child(2){
   padding: 1rem 0.5rem;
-  background-color: rgba(188, 189, 194, 0.4);
+  background-color: rgba(222, 224, 230, 0.4);
   font-size: 1.2rem;
 }
 
@@ -185,7 +185,7 @@ footer{
 }
 
 .description p:nth-child(4){
-  background-color: rgba(188, 189, 194, 0.4);
+  background-color: rgba(222, 224, 230, 0.4);
   padding: 1rem 0.5rem;
 }
 
@@ -271,7 +271,33 @@ footer{
   
   #ind-car{
     display: flex;
+    margin-top: 4rem;
   }
 
+ #ind-car span, #ind-car h2:nth-child(2){
+    font-size: 1.5rem;
+  }
+
+  #ind-car img{
+    width: 22rem;
+    height:fit-content;
+  }
+
+  .description{
+    margin-top: 0;
+    margin-left: 3rem;
+  }
+
+  .description h2:nth-child(1){
+    margin-left: -1rem;
+  }
+
+  .description p{
+    margin: 2rem 0;
+  }
+
+  #ind-car p{
+    font-size: 1.3rem;
+  }
 }
 

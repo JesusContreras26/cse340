@@ -53,7 +53,7 @@ Util.buildClassificationGrid = async function(data){
         })
         grid+= '</ul>'
     }else{
-        grid+= '<p class="notice">Sorry, no matching vehicles could be found.'
+        grid+= '<p class="notice">Sorry, no matching vehicles could be found. </p>'
     }
     return grid
 }
