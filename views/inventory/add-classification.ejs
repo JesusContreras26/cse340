@@ -1,0 +1,27 @@
+<% if(title){%>
+<h1><%=title%></h1>
+<%} else{
+    res.redirect("/")
+}%>
+
+<%- messages() %>
+
+<% if(errors){%>
+    <ul class="notice">
+        <% errors.array().forEach(error =>{ %>
+            <%if(error.msg !== "Invaid value"){%>
+                <li><%= error.msg %></li>
+            <%}%>
+        <%})%>
+    </ul>
+<%}%>
+
+<div class="containerClassification">
+    <p>FIELD IS REQUIRED</p>
+    <form method="post" id="classificationForm">
+        <p>Classification Name</p>
+        <label for="className">NAME MUST BE ALPHABETIC CHARACTERS ONLY</label>
+        <input type="text" name="classification_name" id="className" required pattern="^(\d|\w)+$">
+        <input type="submit" value="Submit" id="submitBtn">
+    </form>
+</div>
