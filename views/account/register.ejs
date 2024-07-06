@@ -1,0 +1,33 @@
+<% if(title) {%>
+<h1><%= title %></h1>
+<%} else{
+    res.redirect('/')
+}%>
+
+<%- messages() %>
+
+<% if (errors) { %>
+    <ul class="notice">
+        <% errors.array().forEach(error => { %>
+            <% if(error.msg !== "Invalid value") {%>
+                <li><%= error.msg %></li>
+            <%}%>
+        <% }) %>
+    </ul>
+<% } %>
+
+<div class="container">
+    <form method="post">
+        <label for="fname">First Name</label><br>
+        <input type="text" name="account_firstname" id="fname" required value="<%= locals.account_firstname %>"><br>
+        <label for="lname">Last Name</label>
+        <input type="text" name="account_lastname" id="lname" required value="<%= locals.account_lastname %>"><br>
+        <label for="email">Email Address</label><br>
+        <input type="email" name="account_email" id="email" class="userEmail" required placeholder="Enter a valid email address" value="<%= locals.account_email %>"><br>
+        <label for="registerPassword">Password</label><br>
+        <input type="password" name="account_password" id="registerPassword" class="userPassword" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$">
+        <div>There must be at least 12 characters, one must be a number, one must be a lowercase letter, one must be a capital letter, and one must be a non-alphanumeric character.</div>
+        <input type="submit" value="Submit" id="submitRegister">
+    </form>
+</div>
+
