@@ -43,6 +43,9 @@ async function getInventoryByInventoryId(inv_id){
     }
 }
 
+/* **************************************
+* Create a new classification in the classification table
+* ************************************ */
 async function createNewClassification(classification_name){
     try {
         const sql = `INSERT INTO public.classification(classification_name) VALUES ($1) RETURNING *`
@@ -52,6 +55,9 @@ async function createNewClassification(classification_name){
     }
 }
 
+/* **************************************
+* Create a new car in the inventory
+* ************************************ */
 async function createNewCar(classification_id, inv_make, inv_model, inv_description, inv_image, inv_thumbnail, inv_price, inv_year, inv_miles, inv_color){
     try {
         const sql = `INSERT INTO public.inventory(classification_id, inv_make, inv_model, inv_description, inv_image, inv_thumbnail, inv_price, inv_year, inv_miles, inv_color) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`
@@ -61,5 +67,29 @@ async function createNewCar(classification_id, inv_make, inv_model, inv_descript
     }
 }
 
+/* **************************************
+* Update an item in the inventory
+* ************************************ */
+async function updateInventory(classification_id, inv_make, inv_model, inv_description, inv_image, inv_thumbnail, inv_price, inv_year, inv_miles, inv_color, inv_id){
+    try {
+        const sql = `UPDATE public.inventory SET inv_make = $1, inv_model = $2, inv_description = $3, inv_image = $4, inv_thumbnail = $5, inv_price = $6, inv_year = $7, inv_miles = $8, inv_color = $9, classification_id = $10 WHERE inv_id = $11 RETURNING *`
+        return await pool.query(sql, [inv_make, inv_model, inv_description, inv_image, inv_thumbnail, inv_price, inv_year, inv_miles, inv_color, classification_id, inv_id])
+    } catch (error) {
+        console.error("model error: " + error)
+    }
+}
 
-module.exports = {getClassification, getInventoryByClassificationId, getInventoryByInventoryId, createNewClassification, createNewCar}
+/* **************************************
+* Delete an item in the inventory
+* ************************************ */
+async function deleteInventoryCar(inv_id){
+    try {
+        const sql = `DELETE FROM public.inventory WHERE inv_id = $1`
+        return await pool.query(sql, [inv_id])
+    } catch (error) {
+        new Error("Delete Inventory Error")
+    }
+}
+
+
+module.exports = {getClassification, getInventoryByClassificationId, getInventoryByInventoryId, createNewClassification, createNewCar, updateInventory, deleteInventoryCar}
