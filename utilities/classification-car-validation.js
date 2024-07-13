@@ -71,7 +71,6 @@ validate.carRules = () =>{
             .trim()
             .notEmpty()
             .isLength({min:1})
-            .isAlphanumeric()
             .withMessage("Introduce a valid description"),
 
         body("inv_image")
@@ -144,6 +143,35 @@ validate.checkCarData = async (req, res ,next) =>{
             inv_year,
             inv_miles,
             inv_color
+        })
+        return
+    }
+    next()
+}
+
+ /* ******************************
+ * Check data and return errors or continue to update the data on the database
+ * ***************************** */
+validate.checkUpdateData = async (req, res ,next) =>{
+    const {classification_id, inv_make, inv_model, inv_description, inv_image, inv_thumbnail, inv_price, inv_year, inv_miles, inv_color, inv_id} = req.body
+    let errors = []
+    errors = validationResult(req)
+    if(!errors.isEmpty()){
+        let nav = await utilities.getNav()
+        let dropDown = await utilities.buildClassificationList(classification_id)
+        res.render("inventory/edit-inventory",{
+            errors,
+            title: "Edit Car " + inv_make + " " + inv_model,
+            nav,
+            dropDown,
+            inv_make,
+            inv_model,
+            inv_description,
+            inv_price,
+            inv_year,
+            inv_miles,
+            inv_color,
+            inv_id
         })
         return
     }
