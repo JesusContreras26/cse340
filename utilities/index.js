@@ -153,7 +153,7 @@ Util.checkUserLogin = (req, res, next) => {
  *  Check User Privilege
  * ************************************ */
 Util.checkUserPrivilege = (req, res, next) => {
-    if (res.locals.accountData.account_type === "Admin") {
+    if (res.locals.accountData.account_type === "Admin" || res.locals.accountData.account_type === "Employee") {
         next()
     } else{
         req.flash("notice", "You don't have access to this tools")
