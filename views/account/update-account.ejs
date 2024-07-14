@@ -20,9 +20,9 @@
     <form action="/account/update-data" method="post" id="updateData">
         <label for="fnamed">First Name</label><br>
         <input type="text" name="account_firstname" id="fnamed" value="<%- locals.accountData.account_firstname %>" required><br>
-        <label for="lname">Last Name</label><br>
+        <label for="lnamed">Last Name</label><br>
         <input type="text" name="account_lastname" id="lnamed" value="<%- locals.accountData.account_lastname %>" required><br>
-        <label for="email">Email</label><br>
+        <label for="emailUpdate">Email</label><br>
         <input type="email" name="account_email" id="emailUpdate" value="<%- locals.accountData.account_email %>" required><br>
         <input type="hidden" name="account_id" value="<%- locals.accountData.account_id %>">
         <input type="submit" value="Update" id="submitData">
