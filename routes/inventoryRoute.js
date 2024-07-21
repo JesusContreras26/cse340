@@ -63,4 +63,8 @@ router.get("/delete/:inv_id",
 
 // Route for delete a car with in the database
 router.post("/delete", utilities.handleErrors(invController.deleteCar))
+
+// Route to send the review form
+router.post("/detail/:invId", utilities.handleErrors(invController.sendReview))
+
 module.exports = router;

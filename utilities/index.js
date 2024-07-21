@@ -1,4 +1,5 @@
 const invModel = require("../models/inventory-model")
+const accountModel = require("../models/account-model")
 const Util = {}
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
@@ -63,10 +64,12 @@ Util.buildClassificationGrid = async function(data){
 /* **************************************
 * Build the car view HTML
 * ************************************ */
-Util.buildCarGrid = async function(data){
+Util.buildCarGridVisitor = async function(data){
     let grid
+    let reviews
     if (data.length > 0) {
         car_data = data[0]
+        reviews = await invModel.getUsersReviews(car_data.inv_id)
         grid = '<div id="ind-car">'
         grid+= '<img src="' + car_data.inv_image +
         '" alt="Image of '+ car_data.inv_make + ' ' + car_data.inv_model
@@ -85,7 +88,93 @@ Util.buildCarGrid = async function(data){
         grid+= '<span>Miles: ' + '</span>' + new Intl.NumberFormat('en-US').format(car_data.inv_miles) 
         grid+= '</p>'
         grid+= '</div>'
-        grid+= '</div>'   
+        grid+= '</div>'
+        grid+= '<div id="user-reviews">'
+        grid+= '<h2> Customer Reviews </h2>'
+        if (reviews) {
+            grid+= '<ul id="reviews">'
+
+                for (let index = 0; index < reviews.length; index++) {
+                    let userInformation = await accountModel.getAccountById(reviews[index].account_id)
+                    grid+= '<li>' + userInformation.account_firstname.charAt(0).toUpperCase() + userInformation.account_lastname + ' Wrote on ' + reviews[index].review_date 
+                    grid+= '<hr />'
+                    grid+= '<p> ' + reviews[index].review_text
+                    grid+= '</p>'
+                    grid+='</li>'
+                }
+
+            grid+= '</ul>'
+        } else{
+            grid+= '<p> Be the first to write a review'
+            grid+= '</p>'
+        }
+        grid+= '<p> You must <a href="../../account/login">login</a> to write a review'
+        grid+= '</p>'
+        grid+= '</div>'
+    } else{
+        grid+= '<p class="notice">Sorry, there is not vehicles of this model' + '</p>'
+    }
+    return grid
+}
+
+Util.buildCarGridUser = async function(data, account){
+    let grid
+    let reviews
+    if (data.length > 0) {
+        car_data = data[0]
+        reviews = await invModel.getUsersReviews(car_data.inv_id)
+        grid = '<div id="ind-car">'
+        grid+= '<img src="' + car_data.inv_image +
+        '" alt="Image of '+ car_data.inv_make + ' ' + car_data.inv_model
+        +' On CSE Motors" />'
+        grid+= '<div class="description">'
+        grid+= '<h2>' + car_data.inv_make + ' ' + car_data.inv_model + ' Details' + '</h2>'
+        grid+= '<h2>' + 'Price: ' + '<span>$' 
+        + new Intl.NumberFormat('en-US').format(car_data.inv_price) + '</span>' +'</h2>'
+        grid+= '<p>'
+        grid+= '<span>Description: ' + '</span>' + car_data.inv_description
+        grid+= '</p>'
+        grid+= '<p>'
+        grid+= '<span>Color: ' + '</span>' + car_data.inv_color
+        grid+= '</p>'
+        grid+= '<p>'
+        grid+= '<span>Miles: ' + '</span>' + new Intl.NumberFormat('en-US').format(car_data.inv_miles) 
+        grid+= '</p>'
+        grid+= '</div>'
+        grid+= '</div>'
+        grid+= '<div id="user-reviews">'
+        grid+= '<h2> Customer Reviews </h2>'
+        if (reviews) {
+            grid+= '<ul id="reviews">'
+
+                for (let index = 0; index < reviews.length; index++) {
+                    let userInformation = await accountModel.getAccountById(reviews[index].account_id)
+                    grid+= '<li>' + userInformation.account_firstname.charAt(0).toUpperCase() + userInformation.account_lastname + ' Wrote on ' + reviews[index].review_date 
+                    grid+= '<hr />'
+                    grid+= '<p> ' + reviews[index].review_text
+                    grid+= '</p>'
+                    grid+='</li>'
+                }
+
+            grid+= '</ul>'
+        } else{
+            grid+= '<p> Be the first to write a review'
+            grid+= '</p>'
+        }
+        grid+= '</div>'
+        grid+= '<div id="new-review">'
+        grid+= '<h2>Add Your Own Review</h2>'
+        grid+= '<form action="/inv/detail/' + car_data.inv_id + '" method="post">'
+        grid+= '<label for="userName">Screen Name: </label><br>'
+        grid+= '<input type="text" name="review_name" value="' + account.account_firstname.charAt(0).toUpperCase() + account.account_lastname + '" required readonly><br>'
+        grid+= '<input type="hidden" name="account_id" value="' + account.account_id + '">'
+        grid+= '<label for="reviewDescription">Review:</label><br>'
+        grid+= '<input type="text" name="review_text" id="reviewDescription" required ><br>'
+        grid+= '<input type="hidden" name="inv_id" value="' + car_data.inv_id + '">'
+        grid+= '<input type="submit" value="Submit" class="submitBtn"><br>'
+        grid+= '</form>'
+        grid+= '</div>'
+
     } else{
         grid+= '<p class="notice">Sorry, there is not vehicles of this model' + '</p>'
     }

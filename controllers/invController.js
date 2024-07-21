@@ -27,7 +27,12 @@ invCont.buildByClassificationId = async function (req, res, next) {
 invCont.buildByInventoryId = async function(req, res, next){
     const inventor_id = req.params.invId
     const data = await invModel.getInventoryByInventoryId(inventor_id)
-    const grid = await utilities.buildCarGrid(data)
+    let grid
+    if (res.locals.loggedin) {
+        grid = await utilities.buildCarGridUser(data, res.locals.accountData)
+    }else{
+        grid = await utilities.buildCarGridVisitor(data)
+    }
     let nav = await utilities.getNav()
     const carName = data[0].inv_year + ' ' + data[0].inv_make + " " +data[0].inv_model
     res.render("./inventory/car",{
@@ -238,6 +243,26 @@ invCont.deleteCar = async function(req, res){
     } else{
         req.flash("notice", "Sorry, the process of deleting failed.")
         res.redirect("/inv/delete/inv_id")
+    }
+
+}
+
+/* *********
+ *  Create a new Review
+ * ********** */
+
+invCont.sendReview = async function(req, res, next){
+    const nav = await utilities.getNav()
+    const {review_text, inv_id, account_id} = req.body
+
+    const reviewResult = await invModel.createNewReview(review_text, inv_id, account_id)
+    
+    if (reviewResult) {
+        req.flash("notice", "The review was added")
+        res.redirect(`/inv/detail/${inv_id}`)
+    }else{
+        req.flash("notice", "There was an error creating your review")
+        res.redirect(`/inv/detail/${inv_id}`)
     }
 
 }
