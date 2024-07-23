@@ -1,6 +1,7 @@
 const { parse } = require("dotenv")
 const invModel = require("../models/inventory-model")
 const utilities = require("../utilities/")
+const accountModel = require("../models/account-model")
 
 const invCont = {}
 
@@ -39,8 +40,8 @@ invCont.buildByInventoryId = async function(req, res, next){
         title: carName,
         nav,
         grid,
-    })
-    
+        errors: null
+    })  
 }
 
 /* **************************************
@@ -266,5 +267,92 @@ invCont.sendReview = async function(req, res, next){
     }
 
 }
+
+
+/* ****************************************
+ *  Display edit review view 
+ * ************************************ */
+invCont.displayEditReviewView = async function (req, res, next) {
+    const nav = await utilities.getNav()
+    const review_id = parseInt(req.params.review_id)
+    const review = await accountModel.userReviewsByReviewId(review_id)
+    const carResult = await invModel.getInventoryByInventoryId(review[0].inv_id)
+    const carData = carResult[0]
+    const dateArranged = utilities.dateFormatted(review[0].review_date)
+    res.render("inventory/edit-review", {
+        title: "Edit " +  carData.inv_year + " " + carData.inv_make + " " + carData.inv_model + " Review",
+        errors: null,
+        nav,
+        review_date: dateArranged,
+        review_text: review[0].review_text,
+        review_id,
+        inv_id: review[0].inv_id
+    })
+}
+
+/* *********
+ *  Update the data of the review in the database and give back an answer
+ * ********** */
+invCont.editReview = async function(req, res){
+    const nav = await utilities.getNav()
+    const {review_id, review_text, review_date, inv_id} = req.body
+    const updateResult = await accountModel.updateReview(review_id, review_text)
+    const carResult = await invModel.getInventoryByInventoryId(inv_id)
+    const carData = carResult[0]
+    if (updateResult) {
+        req.flash("notice", `The Review was successfully updated.`)
+        res.redirect("/account/")
+    } else{
+        req.flash("notice", "Sorry, the insert failed.")
+        res.status(501).render("inventory/edit-review",{
+            title: "Edit " +  carData.inv_year + " " + carData.inv_make + " " + carData.inv_model + " Review",
+            nav,
+            errors: null,
+            review_date,
+            review_text,
+            review_id
+        })
+    }
+
+}
+
+/* ****************************************
+ *  Display delete review view 
+ * ************************************ */
+invCont.displayDeleteReviewView = async function (req, res, next) {
+    const nav = await utilities.getNav()
+    const review_id = parseInt(req.params.review_id)
+    const review = await accountModel.userReviewsByReviewId(review_id)
+    const dateArranged = utilities.dateFormatted(review[0].review_date)
+    const carResult = await invModel.getInventoryByInventoryId(review[0].inv_id)
+    const carData = carResult[0]
+    res.render("inventory/delete-review", {
+        title: "Delete " +  carData.inv_year + " " + carData.inv_make + " " + carData.inv_model + " Review",
+        errors: null,
+        nav,
+        review_date: dateArranged,
+        review_text: review[0].review_text,
+        review_id,
+        inv_id: review[0].inv_id
+    })
+}
+
+/* *********
+ *  Delete the data of the car in the database and give back an answer
+ * ********** */
+invCont.deleteReview = async function(req, res){
+    const nav = await utilities.getNav()
+    const review_id = parseInt(req.body.review_id) 
+    const updateResult = await accountModel.deleteReview(review_id)
+    if (updateResult) {
+        req.flash("notice", `The review was successfully deleted.`)
+        res.redirect("/account/")
+    } else{
+        req.flash("notice", "Sorry, the process of deleting failed.")
+        res.redirect(`/inv/delete-review/${review_id}`)
+    }
+
+}
+
 
 module.exports = invCont

@@ -1,6 +1,7 @@
 const utilities = require(".")
 const { body, validationResult } = require("express-validator")
 const validate = {}
+const invModel = require("../models/inventory-model")
 
 /*  **********************************
   *  Classification Data Validation Rules
@@ -174,6 +175,66 @@ validate.checkUpdateData = async (req, res ,next) =>{
             inv_id
         })
         return
+    }
+    next()
+}
+
+/*  **********************************
+  *  Review text Data Validation Rules
+  * ********************************* */
+validate.reviewRules = () =>{
+    return[
+        //Classification name required no spaces, no especial characters
+        body("review_text")
+            .escape()
+            .trim()
+            .notEmpty()
+            .isLength({min:1})
+            .withMessage("Introduce a valid description"),
+    ]
+ }
+
+  /* ******************************
+ * Check data and return errors or continue to update the data on the database
+ * ***************************** */
+validate.checkReviewData = async (req, res ,next) =>{
+    let errors = []
+    errors = validationResult(req)
+    if(!errors.isEmpty()){
+        const {inv_id} = req.body
+        const data = await invModel.getInventoryByInventoryId(inv_id)
+        let grid
+        grid = await utilities.buildCarGridUser(data, res.locals.accountData)
+        let nav = await utilities.getNav()
+        res.render("./inventory/car",{
+            title: data[0].inv_year + ' ' + data[0].inv_make + " " +data[0].inv_model,
+            nav,
+            grid,
+            errors
+        })
+        return  
+    }
+    next()
+}
+
+validate.checkReviewEditData = async (req, res ,next) =>{
+    let errors = []
+    errors = validationResult(req)
+    if(!errors.isEmpty()){
+        const nav = await utilities.getNav()
+        const {review_id, review_date, inv_id, review_text} = req.body
+        const carResult = await invModel.getInventoryByInventoryId(inv_id)
+        const carData = carResult[0]
+        res.render("inventory/edit-review", {
+            title: "Edit " +  carData.inv_year + " " + carData.inv_make + " " + carData.inv_model + " Review",
+            errors,
+            nav,
+            review_date,
+            review_text,
+            review_id,
+            inv_id
+        })
+        return  
     }
     next()
 }

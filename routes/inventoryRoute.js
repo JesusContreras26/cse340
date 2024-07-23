@@ -65,6 +65,24 @@ router.get("/delete/:inv_id",
 router.post("/delete", utilities.handleErrors(invController.deleteCar))
 
 // Route to send the review form
-router.post("/detail/:invId", utilities.handleErrors(invController.sendReview))
+router.post("/detail/:invId", 
+    classCarValidation.reviewRules(),
+    classCarValidation.checkReviewData,
+    utilities.handleErrors(invController.sendReview))
+
+// Route for displaying edit review form
+router.get("/edit-review/:review_id", utilities.handleErrors(invController.displayEditReviewView))
+
+// Route for displaying delete review form
+router.get("/delete-review/:review_id", utilities.handleErrors(invController.displayDeleteReviewView))
+
+//Route to delete the review
+router.post("/delete-review", utilities.handleErrors(invController.deleteReview))
+
+//Route to edit the review
+router.post("/edit-review",
+    classCarValidation.reviewRules(),
+    classCarValidation.checkReviewEditData,
+    utilities.handleErrors(invController.editReview))
 
 module.exports = router;

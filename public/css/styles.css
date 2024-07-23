@@ -304,12 +304,13 @@ input:required:valid {
   margin: 2rem 0;
 }
 
-#sucessLogin p, #sucessLogin h2{
+#sucessLogin p{
   margin: 0.7rem 0;
+  font-size: 1.2rem;
 }
 
-#sucessLogin p{
-  font-size: 1.2rem;
+#sucessLogin h2{
+  margin: 1rem 0;
 }
 
 #updateAccWrapper{
@@ -366,6 +367,77 @@ input:required:valid {
 
 #updateBtn, #deleteBtn{
   width: 60%;
+}
+
+#reviewDescription{
+  width: 90%;
+  height: 10rem;
+  font-size: 1.2rem;
+}
+
+#reviews{
+  margin: 1rem;
+}
+
+#reviews li{
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+#reviews hr{
+  border: 2px solid black;
+}
+
+#reviews li span{
+  font-weight: bolder;
+}
+
+#new-review{
+  margin-top: 2rem;
+}
+
+#new-review form{
+  margin-top: 1rem;
+  border: 1px solid black;
+  border-radius: 2px;
+  padding: 1rem;
+  font-size: 1.2rem;
+}
+
+#userName{
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+#submitBtnReview{
+  width: 25%;
+  padding: 0.2rem;
+  cursor: pointer;
+}
+
+#reviewList h2{
+  margin-top: 2rem;
+}
+
+#reviewList li{
+  list-style: decimal;
+  margin: 0 2rem;
+  font-size: 1.1rem;
+}
+
+#user-reviews h2{
+  margin: 1rem 0;
+}
+
+.firstReview{
+  background-color: yellow;
+  font-size: 1.2rem;
+  padding: 0.3rem;
+}
+
+#loginFirst{
+  font-size: 1.2rem;
+  margin: 1rem 0;
 }
 
 @media screen and (min-width: 500px){
@@ -510,7 +582,7 @@ input:required:valid {
     width: 15%;
   }
 
-  #submitData{
+  #submitData, #submitBtnReview{
     width: 10%;
   }
 
@@ -518,5 +590,9 @@ input:required:valid {
     width: 40%;
   }
 
+  #reviewDescription{
+    width: 60%;
+    height: 10rem;
+  }
 }
 
