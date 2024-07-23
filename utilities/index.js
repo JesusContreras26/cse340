@@ -199,8 +199,8 @@ Util.buildClassificationList = async function(classification_id = null){
 Util.buildReviews = async function(userReviews, userCarRev){
     let reviewList = ''
     if(userReviews.length > 0){
-        reviewList+= '<ul id="reviewList">'
         reviewList+= '<h2>My Reviews</h2>'
+        reviewList+= '<ul id="reviewList">'
         for (let index = 0; index < userReviews.length; index++) {
             reviewList+= '<li>Reviewed the ' + userCarRev[index].inv_year + ' ' + userCarRev[index].inv_make + ' ' + userCarRev[index].inv_model + ' on ' + Util.dateFormatted(userReviews[index].review_date) 
             reviewList+= ` | <a href="/inv/edit-review/${userReviews[index].review_id}"> Edit </a> | <a href="/inv/delete-review/${userReviews[index].review_id}"> Delete </a>`

@@ -440,6 +440,12 @@ input:required:valid {
   margin: 1rem 0;
 }
 
+.notice{
+  font-size: 1.2rem;
+  color: red;
+  list-style: none;
+}
+
 @media screen and (min-width: 500px){
   body{
     background-image: url(/images/site/checkerboard.jpg);
