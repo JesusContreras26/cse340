@@ -69,4 +69,56 @@ async function getAccountById(account_id){
     }
 }
 
-module.exports = {registerAccount, checkExistingEmail, getAccountByEmail, updateAccount, updatePassword, getAccountById }
+/* ***************************
+ *  Get all user reviews by account_id
+ * ************************** */
+async function userReviewsById(account_id){
+    try {
+        const data = await pool.query(
+            `SELECT * FROM public.review AS re
+            WHERE re.account_id = $1`,
+            [account_id]
+        )
+        return data.rows;
+    } catch (error) {
+        console.error("getinventorybyid error " + error)
+    }
+}
+
+/* ***************************
+ *  Get Review by review_id
+ * ************************** */
+async function userReviewsByReviewId(review_id){
+    try {
+        const data = await pool.query(
+            `SELECT * FROM public.review AS re
+            WHERE re.review_id = $1`,
+            [review_id]
+        )
+        return data.rows;
+    } catch (error) {
+        console.error("getinventorybyid error " + error)
+    }
+}
+
+/* **************************************
+* Delete a review by review_id
+* ************************************ */
+async function deleteReview(review_id){
+    try {
+        const sql = `DELETE FROM public.review WHERE review_id = $1`
+        return await pool.query(sql, [review_id])
+    } catch (error) {
+        new Error("Delete Inventory Error")
+    }
+}
+
+async function updateReview(review_id, review_text){
+    try {
+        const sql = `UPDATE public.review SET review_text = $1 WHERE review_id = $2 RETURNING *`
+        return await pool.query(sql, [review_text, review_id])
+    } catch (error) {
+        console.error("model error: " + error)
+    }
+}
+module.exports = {registerAccount, checkExistingEmail, getAccountByEmail, updateAccount, updatePassword, getAccountById, userReviewsById, userReviewsByReviewId, deleteReview, updateReview }

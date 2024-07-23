@@ -37,6 +37,7 @@ async function getInventoryByInventoryId(inv_id){
             WHERE i.inv_id = $1`,
             [inv_id]
         )
+        console.log(data.rows)
         return data.rows;
     } catch (error) {
         console.error("getinventorybyid error " + error)
@@ -91,5 +92,32 @@ async function deleteInventoryCar(inv_id){
     }
 }
 
+/* **************************************
+* Select all users reviews
+* ************************************ */
+async function getUsersReviews(inv_id){
+    try {
+        const data = await pool.query(
+            `SELECT * FROM public.review AS re
+            WHERE re.inv_id = $1`,
+            [inv_id]
+        )
+        console.log(data.rows)
+        return data.rows;
+    } catch (error) {
+        console.error("getinventorybyid error " + error)
+    }
+}
 
-module.exports = {getClassification, getInventoryByClassificationId, getInventoryByInventoryId, createNewClassification, createNewCar, updateInventory, deleteInventoryCar}
+/* **************************************
+* Create a new review
+* ************************************ */
+async function createNewReview(review_text, inv_id, account_id){
+    try {
+        const sql = `INSERT INTO public.review(review_text, inv_id, account_id) VALUES ($1, $2, $3) RETURNING *`
+        return await pool.query(sql, [review_text, inv_id, account_id])
+    } catch (error) {
+        return error
+    }
+}
+module.exports = {getClassification, getInventoryByClassificationId, getInventoryByInventoryId, createNewClassification, createNewCar, updateInventory, deleteInventoryCar, getUsersReviews, createNewReview}

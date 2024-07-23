@@ -1,0 +1,31 @@
+<% if(title){%>
+<h1><%=title%></h1>
+<%} else{
+    res.redirect("/")
+}%>
+
+<%- messages() %>
+
+<% if(errors){%>
+    <ul class="notice">
+        <% errors.array().forEach(error =>{ %>
+            <%if(error.msg !== "Invaid value"){%>
+                <li><%= error.msg %></li>
+            <%}%>
+        <%})%>
+    </ul>
+<%}%>
+
+<div class="containerClassification">
+    <p>FIELD IS REQUIRED</p>
+    <form method="post" id="classificationForm">
+        <p>User Review</p>
+        <input type="text" name="review_name" value="<%= locals.accountData.account_firstname %> <%= locals.accountData.account_lastname %>" required readonly><br>
+        <label for="reviewDescription">Introduce your review</label><br>
+        <input type="text" name="review_description" id="reviewDescription" required ><br>
+        <input type="submit" value="Submit" class="submitBtn"><br>
+        <input type="hidden" name="inv_id" <% if (locals.invId) {%> value="<%= locals.invId %>"
+            
+        <%} %>>
+    </form>
+</div>
