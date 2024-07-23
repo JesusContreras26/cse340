@@ -21,7 +21,7 @@
     <form action="/inv/delete-review" method="post" class="addCar" id="deleteForm">
         <label for="review-date">Review Date</label><br>
         <input type="text" name="review_date" readonly id="review-date" required value="<%= locals.review_date %>"><br>
-        <label for="review-text">Review Text</label><br>
+        <label for="description-review">Review Text</label><br>
         <textarea name="review_text" id="description-review" required><%= locals.review_text %></textarea><br>
         <input type="submit" value="Delete Review" id="deleteBtn" class="submitBtn">
         <input type="hidden" name="review_id"
